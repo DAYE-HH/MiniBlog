@@ -1,0 +1,33 @@
+<div th:fragment="frag_index_content" class="content-wrapper">
+  <div class="card-body">
+    <form method="post">
+      <div class="row">
+        <div class="col-sm-6">
+          
+          <!-- text input -->
+          <div class="form-group">
+            <label for="name" class="form-label">작성자</label>
+            <input type="text" th:field="*{postForm.name}" id="name" class="form-control" placeholder="작성자명을 입력해주세요:)">
+          </div>
+          <div class="form-group">
+            <label for="subject" class="form-label">제목</label>
+            <input type="text" th:field="*{postForm.subject}" id="subject" class="form-control" placeholder="제목을 입력해주세요:)">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <!-- textarea -->
+          <div class="form-group">
+            <label for="content" class="form-label">본문</label>
+            <textarea name="content" th:field="*{postForm.content}" id="content" class="form-control" rows="20"
+              placeholder="본문을 입력해주세요:)"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="my-3">
+        <input type="submit" value="저장하기" class="btn btn-outline-secondary">
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html layout:decorate="~{lib/layout}">
+
+<div layout:fragment="content" class="wrapper">
+  <!-- Navbar -->
+  <div th:replace="~{lib/navbar.html :: sagment_navbar}"></div>
+  <!-- /.Navbar -->
+  
+  <!-- Sidebar -->
+  <div th:replace="~{lib/sidebar.html :: sagment_sidebar}"></div>
+  <!-- /.Sidebar -->
+  
+  <!-- Content Wrapper. Contains page content -->
+  <div th:replace="~{pages/post_list_content.html :: frag_index_content}"></div>
+  <!-- /.content-wrapper -->
+
+</div>
+</html>

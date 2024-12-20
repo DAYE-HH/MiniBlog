@@ -1,0 +1,78 @@
+<div th:fragment="frag_index_content" class="content-wrapper">
+
+	<div class="content-header">
+		<div class="container-fluid">
+
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h4 class="container mx-5"> 상세보기</h4>
+				</div><!-- /.col -->
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-lg-right">
+
+						<li class="breadcrumb-item active"><a href="/post/list">게시글 목록</a></li>
+					</ol>
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+		</div><!-- /.container-fluid -->
+	</div>
+
+	<div class="container-fluid">
+		<!-- Small boxes (Stat box) -->
+		<div class="row">
+			<div class="col-lg-12 col-12">
+
+				<div class="container my-3">
+					<!-- 타임리프 표준주석 : 개발자만 볼수 있다 -->
+					<!--/* card 단위는 기본적으로 특정 콘텐츠 하나를 독립적 담는 구분 단위(라운드로 표현) */-->
+					<div class="card my-3">
+						<div class="card-header">
+							<!--/* 제목 */-->
+							<h4 th:text="${ post.subject}"></h4>
+						</div>
+						<div class="card-body">
+							<!--/* 내용 */-->
+							<div class="card-text" th:text="${ post.content}"></div>
+							<!--/* 작성시간 */-->
+							<div class="badge bg-light text-primary text-start"
+								th:text="${ #temporals.format( post.getCreateDate(), 'yyyy-MM-dd HH:mm')  }">
+							</div>
+						</div>
+					</div>
+					<!-- 수정, 삭제 버튼 추가 -->
+					<a th:href="|/post/modify/${post.id}|" class="btn btn-outline-dark" style="float:right">수정</a>
+					<form method="delete" th:action="@{|/post/delete/${post.id}|}">
+						<input type="submit" value="삭제" class="btn btn-outline-dark" style="float:right">
+					</form>
+				</div>
+				<div class="container my-3"><br>
+					<br>
+					<h5 class="border-bottom py-2 my-3" th:text="|리뷰 ${#lists.size(post.postReviewList)}개|">
+					</h5>
+					<form th:action="@{|/postReview/create/${post.id}|}" method="post" 
+						th:object="${postReviewForm}">
+						<div th:replace="~{lib/frag :: formErrorFrag}"></div>
+						<input type="text" name="content" id="content" />
+						<input type="submit" value="리뷰 등록" />
+					</form>
+				</div>
+				<div class="container my-3">
+					<div class="card my-3 bg-light" th:each="postReview : ${post.postReviewList}">
+						<div class="card-body">
+							<div class="card-text">
+								[[ |${ postReview.content} -
+								${ #temporals.format(postReview.getCreateDate(), 'yyyy-MM-dd HH:mm' )}| ]]
+							</div>
+						</div>
+						<div class="card-footer">
+							<a th:href="|/postReview/modify/${postReview.id}|" class="btn btn-outline-dark"
+								style="float:right">수정</a>
+							<a th:href="|/postReview/delete/${postReview.id}|" class="btn btn-outline-dark"
+								style="float:right">삭제</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>

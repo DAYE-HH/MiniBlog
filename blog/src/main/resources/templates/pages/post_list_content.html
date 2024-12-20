@@ -1,0 +1,44 @@
+<div th:fragment="frag_index_content" class="content-wrapper">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">📋 게시글 목록</h3>
+
+        <div class="card-tools">
+          <a th:href="@{/post/create}">✎&emsp;</a>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body table-responsive p-0">
+        <table class="table table-head-fixed text-nowrap">
+          <thead>
+            <tr>
+              <th>ꕤ</th>
+              <th>제목</th>
+              <th>작성자</th>
+              <th>작성일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="post, idx: ${posts}">
+              <td>[[ ${ idx.count } ]]</td>
+              <td>
+                <!-- @{} => 링크 추가, 외부리소스(css|js|png|..) 링크추가 -->
+                <a th:href="@{|/post/detail/${ post.id }|}" th:text="${ post.subject }"></a>
+              </td>
+              <td>
+              	<a th:text="${ post.name }"></a>
+              </td>
+              <td>
+              	<a th:text="${ #temporals.format( post.getCreateDate(), 'yyyy-MM-dd HH:mm') }"></a>
+              </td>
+              
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>

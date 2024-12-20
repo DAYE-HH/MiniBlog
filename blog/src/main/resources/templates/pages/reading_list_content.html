@@ -1,0 +1,37 @@
+<div th:fragment="frag_index_content" class="content-wrapper">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">💌 독서 목록</h3>
+        <div class="card-tools">
+          <a th:href="@{/reading/create}">✎&emsp;</a>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="reading">
+          <tr th:each="reading, idx: ${readings}">
+            <div class="user-block">
+              <strong>
+                &emsp;<a th:text="${ reading.name }"></a>
+              </strong>
+              <br>
+              &emsp;<a th:text="${ #temporals.format( reading.getCreateDate(), 'yyyy-MM-dd HH:mm') }"></a>
+            </div>
+            <a th:href="|/reading/modify/${reading.id}|" class="btn btn-outline-dark" style="float:right">수정</a>
+            <form method="delete" th:action="@{|/reading/delete/${reading.id}|}">
+              <input type="submit" value="삭제" class="btn btn-outline-dark" style="float:right">
+            </form>
+            <div>
+              <br>
+              <br>
+              &emsp;<a th:text="${ reading.content }"></a>
+            </div>
+            <br>
+          </tr>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

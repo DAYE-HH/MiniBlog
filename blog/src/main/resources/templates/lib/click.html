@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <!-- onclick="increase()" : 클릭할 때 함수를 호출해라-->
+    <button id="countBtn" onclick="increase()">0</button>
+    
+    <script>
+        
+        //quiz 내용 : 버튼을 누를때마다 button의 innerText가 1씩 증가되게 해보세요.
+        //주의할 점!! 함수명과 변수명이 겹치면 안된다.
+        //페이지가 로딩되는 시점에 count 값을 0으로 초기화 한다. 
+        var count=0;
+        function increase(){
+            count=count+1;
+            document.querySelector("#countBtn").innerText=count;
+        }
+
+        
+    </script>
+</body>
+</html>

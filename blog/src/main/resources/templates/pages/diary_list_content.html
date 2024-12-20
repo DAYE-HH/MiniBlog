@@ -1,0 +1,159 @@
+<div th:fragment="frag_index_content"  class="content-wrapper">
+<div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">📅 다이어리 목록</h3>
+
+        <div class="card-tools">
+         
+          
+          <form method="get" th:action="@{/diary/list2}" id="searchForm">
+                  <!--/* 검색어 유지 */-->
+                  <input type="hidden" id="keyword" name="keyword" th:value="${keyword}">
+                  <!--/* 페이지값 유지 */-->
+                  <input type="hidden" id="page" name="page" th:value="${paging.number}">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                    <!--검색어 입력파트, 화면에 노출되는 영역-->
+                    <input type="text" id="search_keyword" th:value="${keyword}" class="form-control float-right"
+                      placeholder="Search">
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-default" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                      </button>
+                      &emsp;<a th:href="@{/diary/create}">✎&ensp;</a>
+                    </div>
+                  </div>
+                   
+                </form>
+          
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body table-responsive p-0">
+        <table class="table table-head-fixed text-nowrap">
+          <thead>
+            <tr>
+              <th>ꕤ</th>
+              <th>제목</th>
+              <th>작성일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="diary, idx: ${paging}">
+              <td>[[${idx.count}]]</td>
+              <td>
+              <a th:href="@{|/diary/detail/${ diary.id }|}" th:text="${diary.subject}"></a>
+              </td>
+              <td>
+              <a th:text="${ #temporals.format( diary.getCreateDate(), 'yyyy-MM-dd HH:mm')}"></a>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="card-footer clearfix">
+              <ul class="pagination pagination-sm m-0 float-right">
+                <!--/* 이전, 1페이지씩 쉬프트, 이전페이지가 없다면 비활성처리(disabled 속성) */-->
+                <li class="page-item" th:classappend="${ !paging.hasPrevious } ? 'disabled'">
+                  <!-- <a class="page-link" th:href="@{|?page=${ paging.number-1 }|}">«</a> -->
+                  <!-- javascript:void(0) : a 요소의 이벤트 무효화(링크기능), 
+                 스크립트에 등록된 이벤트(click)로 전달, 데이터는 data-page 설정된 값을 가져간다 -->
+                  <a class="page-link" href="javascript:void(0)" th:data-page="${ paging.number-1 }">
+                    <span>«</span>
+                  </a>
+                </li>
+
+                <!--/* 
+						- 이동가능한 페이지 번호 나열, 전체나열 -> 제시한 페이지 기준, 앞에 5개, 위에 5개
+						- 로직은 다양하게 구사 가능
+						- 현재 페이지 번호는는 조금 다르게 묘사(두껍게, 색상을 다르게 등등..)
+						- 노출된페이지 번호 조건
+							- 현재페이지값이 현재페이지-5 이상이고(and, &&), 현재페이지+5 이하인 경우만 포함
+							- page >= paging.number-5 and page <= paging.number+5
+							- page >= paging.number-5 and paging.number+5 >= page
+					 */-->
+                <li th:each="page : ${ #numbers.sequence(0, paging.totalPages-1) }"
+                  th:classappend="${page == paging.number} ? 'active' "
+                  th:if="${ paging.number-5 <= page and page <= paging.number+5 }" class="page-item">
+                  <!-- <a class="page-link" th:href="@{|?page=${ page }|}" th:text="${page+1}"></a> -->
+                  <a class="page-link" 
+                     href="javascript:void(0)" 
+                     th:data-page="${ page }" 
+                     th:text="${page+1}"></a>
+                </li>
+
+                <!--/* 다음 */-->
+                <li class="page-item" th:classappend="${ !paging.hasNext } ? 'disabled'">
+                  <!-- <a class="page-link" th:href="@{|?page=${ paging.number+1 }|}">»</a> -->
+                  <a class="page-link" href="javascript:void(0)" th:data-page="${ paging.number+1 }">
+                    <span>»</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+      
+    </div>
+    <!-- /.card -->
+     <!-- 자바스크립트 삽입 -->
+  <script type="text/javascript">
+    // js 변수 표기: 키워드(var(변수), let(변수), const(상수)) 변수명
+    // js의 변수 타입은 언제 세팅? => 값이 세팅되면 그때 타입이 결정됨
+    // 순수 js로 기술
+
+    // 이전 1,2,3,... 다음 -> 페이징 링크 요소 -> 공통적으로 class 값이 page-link 였다
+    // 현 문서상에 존재하는 모든 요소들 중에, 클레스 값이  page-link 모든 요소를 다 찾아라
+    // subject.getElementsByClassName("page-link"); => $(".page-link");
+    const links = document.getElementsByClassName("page-link");
+    console.log("페이징 요소의 개수", links.length);
+    // 배열에서 하나씩 꺼내서 클릭이벤트 등록 - 반복문
+    Array.from(links).forEach( (link)=>{
+      // 요소 확인 해봄
+      //console.log( link );
+      // 요소 하나하나에 클릭 이벤트 등록
+      link.addEventListener('click', function (e) {
+        console.log( this.dataset.page ); // 페이지 번호
+        document.getElementById("page").value = this.dataset.page;
+        document.getElementById("searchForm").submit();
+      } )
+    } )
+
+    // 검색 버튼 클릭 이벤트 잡아서 처리
+    // 1. 검색 버튼을 특정해서, 
+    const searchBtn = document.getElementById("searchBtn"); // 단수, 객체는 1개
+    // 2. 해당 버튼에 이벤트 등록(재정의) 한다
+    //    이벤트명 : 'click', 사전에 정의되어있다
+    //    클릭 이벤트가 발생되면 -> 잠시후에 -> 리스너에 등록된 이벤트 처리 함수(콜백함수)가 
+    //    자동으로 호출된다
+    searchBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      // 하고 싶은 작업 진행
+      console.log("버큰 클릭 이벤트 처리");
+      // 2. 검색어 입력태그를 특정해서, 검색어값 세팅
+      document.getElementById("keyword").value
+        = document.getElementById("search_keyword").value
+      // 3. 페이징 번호(값) 입력 태그에 세팅
+      document.getElementById("page").value = 0;
+      // 4. 폼태그를 특정해서 서버에 전송(submit 이밴트(행위) 진행)
+      document.getElementById("searchForm").submit();
+      return false;
+    })
+    // 표준함수(함수==메소드)
+    /*
+    자바의 표준 메소드 문법
+    [모디파이어(접근제어자(private,..), 일반(final, staic, abstract,..))] 
+    리턴타입(8+무한대+1) 메소드명(인자)  {
+      [스테이트먼트];
+      [return [값]]; // []생략가능
+    }
+
+    자바스크립트
+    function [함수명] (인자) {
+      [스테이트먼트];
+      [return [값]];
+    }
+    */
+  </script>
+  </div>

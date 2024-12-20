@@ -1,0 +1,40 @@
+<div th:fragment="frag_index_content" class="content-wrapper">
+  <div class="card-body">
+    <form method="post">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>기록일</label><br>
+            <!--  
+            <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
+              <input type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime">
+              <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+            -->
+            <input type= date>
+          </div>
+          <!-- text input -->
+          <div class="form-group">
+            <label for="subject" class="form-label">제목</label>
+            <input type="text" th:field="*{diaryForm.subject}" id="subject" class="form-control" placeholder="제목을 입력해주세요:)">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <!-- textarea -->
+          <div class="form-group">
+            <label for="content" class="form-label">본문</label>
+            <textarea name="content" th:field="*{diaryForm.content}" id="content" class="form-control" rows="20"
+              placeholder="본문을 입력해주세요:)"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="my-3">
+        <input type="submit" value="저장하기" class="btn btn-outline-secondary">
+      </div>
+    </form>
+  </div>
+</div>
